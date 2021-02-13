@@ -1,0 +1,9 @@
+api-version: 1.13
+name: PlayerTracker
+main: playertracker.Main
+version: 0.0.1
+description: tracks players
+commands:
+  tracker:
+    description: none
+    usage: /tracker
