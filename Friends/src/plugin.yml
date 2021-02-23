@@ -1,0 +1,9 @@
+api-version: 1.13
+name: Friends
+main: Friends.Main
+version: 0.0.1
+description: Friend request etc
+commands:
+  friendsflower:
+    description: none
+    usage: /friendsFlower
