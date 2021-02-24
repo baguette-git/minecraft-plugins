@@ -11,25 +11,24 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import Friends.Main;
 import Friends.items.FriendsPoppy;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.MainHand;
+
+import java.time.LocalDateTime;
 
 
 public class FriendsFlowerInteractEvent implements Listener {
 
-    String baseMsg = "Received a friend request from: ";
+    String baseMsg = "Received a friend request from: %s";
     Main plugin;
+
     public FriendsFlowerInteractEvent(Main plugin){
          this.plugin = plugin;
     }
-
     @EventHandler
     public void onPlayerClick(PlayerInteractEntityEvent e){
         Player player = e.getPlayer();
-
         EquipmentSlot hand = e.getHand();
         if(hand != null && hand != EquipmentSlot.OFF_HAND)
             return;
-
         if(FriendsPoppy.isFriendsPoppy(player.getInventory().getItemInMainHand())){
             Entity entity = e.getRightClicked();
             if(entity instanceof Player){
@@ -39,11 +38,9 @@ public class FriendsFlowerInteractEvent implements Listener {
                 TextComponent space = new TextComponent(" ");
 
                 TextComponent accept = new TextComponent("[ACCEPT]");
-                ComponentBuilder builder = new ComponentBuilder();
-
                 accept.setColor(ChatColor.GREEN);
                 accept.setBold(true);
-                accept.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "addFriend " + player.getUniqueId()));
+                accept.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "addFriend " + player.getUniqueId() + " " + LocalDateTime.now().toString()));
                 accept.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("Accept friend request from: " + player.getName())));
 
                 TextComponent deny = new TextComponent("[DENY]");
@@ -54,6 +51,7 @@ public class FriendsFlowerInteractEvent implements Listener {
 
                 accept.addExtra(space);
                 accept.addExtra(deny);
+                clickedPlayer.sendMessage(String.format(baseMsg, player.getName()));
                 clickedPlayer.spigot().sendMessage(accept);
             }
         }
